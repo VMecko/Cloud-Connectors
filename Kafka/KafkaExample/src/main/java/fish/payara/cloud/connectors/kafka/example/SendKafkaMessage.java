@@ -54,10 +54,10 @@ import org.apache.kafka.clients.producer.ProducerRecord;
  *
  * @author Steve Millidge (Payara Foundation)
  */
-@ConnectionFactoryDefinition(name = "java:comp/env/KafkaConnectionFactory", 
+@ConnectionFactoryDefinition(name = "java:comp/env/payaracf", 
   description = "Kafka Conn Factory", 
   interfaceName = "fish.payara.cloud.connectors.kafka.api.KafkaConnectionFactory", 
-  resourceAdapter = "kafka-rar-0.6.0-SNAPSHOT", 
+  resourceAdapter = "kafka-rar-0.1.0-SNAPSHOT", 
   minPoolSize = 2, 
   maxPoolSize = 2,
   transactionSupport = TransactionSupportLevel.NoTransaction,
@@ -66,7 +66,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 @Stateless
 public class SendKafkaMessage {
     
-    @Resource(lookup="java:comp/env/KafkaConnectionFactory")
+    @Resource(lookup="java:comp/env/payaracf")
     KafkaConnectionFactory factory;
     
     @Schedule(second = "*/1", hour="*", minute="*")
