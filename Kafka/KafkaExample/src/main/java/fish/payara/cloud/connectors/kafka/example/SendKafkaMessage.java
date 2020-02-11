@@ -73,7 +73,7 @@ public class SendKafkaMessage {
     public void sendMessage() throws Exception {
 
         try (KafkaConnection conn = factory.createConnection()) {
-            conn.send(new ProducerRecord("test","hello","world"));
+            conn.send(new ProducerRecord("payara-in","hello","world"));
         } catch (Exception ex) {
             Logger.getLogger(SendKafkaMessage.class.getName()).log(Level.SEVERE, null, ex);
         }
