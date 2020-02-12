@@ -58,6 +58,13 @@ import javax.resource.spi.TransactionSupport;
 import javax.security.auth.Subject;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
+
+import javax.naming.NamingException;
+
 
 /**
  *
@@ -354,19 +361,48 @@ public class KafkaManagedConnectionFactory implements ManagedConnectionFactory, 
         	properties.put("key.serializer", serializer);
         	properties.put("value.serializer", serializer);
         */
-        	String kafkauser = "ibsdev";
-        	String kafkapass = "ibsdevpasswd";
+        	try {
+        	Context p_ctx;
+    		p_ctx = new InitialContext();
+    		
+    		String brokers = (String) p_ctx.lookup("var/IBS2KafkaHosts");
+    		String kafkauser = (String) p_ctx.lookup("var/IBS2KafkaUser");
+    		String kafkapass = (String) p_ctx.lookup("var/IBS2KafkaPass");
+    		String groupID = (String) p_ctx.lookup("var/IBS2GroupID");
+        	
+    		
     		String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
     		String jaasCfg = String.format(jaasTemplate, kafkauser, kafkapass);
-        	String brokers = "10.90.37.20:9093,10.90.37.21:9093,10.90.37.22:9093";
-        	String groupID = "ibs";
         	
+    		String serializer = StringSerializer.class.getName();
+    		String deserializer = StringDeserializer.class.getName();
+    		
+    		/* STARY VYVOJ
+    		props.put("enable.auto.commit", "true");
+    		props.put("auto.commit.interval.ms", "1000");
+    		props.put("auto.offset.reset", "earliest");
+    		props.put("session.timeout.ms", "30000");
+    		props.put("key.deserializer", deserializer);
+    		props.put("value.deserializer", deserializer);
+    		props.put("key.serializer", serializer);
+    		props.put("value.serializer", serializer);
+    		props.put("security.protocol", "SASL_PLAINTEXT");
+    		props.put("sasl.mechanism", "SCRAM-SHA-256");
+    		props.put("sasl.jaas.config", jaasCfg);
+    		*/
+    		properties.put("key.deserializer", deserializer);
+    		properties.put("value.deserializer", deserializer);
+    		properties.put("key.serializer", serializer);
+    		properties.put("value.serializer", serializer);
         	properties.put("bootstrap.servers", brokers);
         	properties.put("group.id", groupID);
         	properties.put("security.protocol", "SASL_PLAINTEXT");
         	properties.put("sasl.mechanism", "SCRAM-SHA-256");
         	properties.put("sasl.jaas.config", jaasCfg);
-            producer = new KafkaProducer(properties);
+            producer = new KafkaProducer(properties);}
+        	catch(NamingException e) {
+        		//...
+        	}
         }
         return new KafkaConnectionFactoryImpl(this,cxManager);
     }
