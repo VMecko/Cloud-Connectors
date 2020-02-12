@@ -340,7 +340,32 @@ public class KafkaManagedConnectionFactory implements ManagedConnectionFactory, 
                 additionalPropertiesParser == null
                         ? producerProperties
                         : AdditionalPropertiesParser.merge(producerProperties,  additionalPropertiesParser.parse());
+        
         if (producer == null) {
+        /*
+        	properties.put("bootstrap.servers", brokers);
+        	properties.put("group.id", groupID);
+        	properties.put("enable.auto.commit", "true");
+        	properties.put("auto.commit.interval.ms", "1000");
+        	properties.put("auto.offset.reset", "earliest");
+        	properties.put("session.timeout.ms", "30000");
+        	properties.put("key.deserializer", deserializer);
+        	properties.put("value.deserializer", deserializer);
+        	properties.put("key.serializer", serializer);
+        	properties.put("value.serializer", serializer);
+        */
+        	String kafkauser = "ibsdev";
+        	String kafkapass = "ibsdevpasswd";
+    		String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
+    		String jaasCfg = String.format(jaasTemplate, kafkauser, kafkapass);
+        	String brokers = "10.90.37.20:9093,10.90.37.21:9093,10.90.37.22:9093";
+        	String groupID = "ibs";
+        	
+        	properties.put("bootstrap.servers", brokers);
+        	properties.put("group.id", groupID);
+        	properties.put("security.protocol", "SASL_PLAINTEXT");
+        	properties.put("sasl.mechanism", "SCRAM-SHA-256");
+        	properties.put("sasl.jaas.config", jaasCfg);
             producer = new KafkaProducer(properties);
         }
         return new KafkaConnectionFactoryImpl(this,cxManager);
