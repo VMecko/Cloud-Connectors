@@ -375,6 +375,7 @@ public class KafkaManagedConnectionFactory implements ManagedConnectionFactory, 
     		String jaasCfg = String.format(jaasTemplate, kafkauser, kafkapass);
         	
     		String serializer = StringSerializer.class.getName();
+    		String valueSerializer = "org.apache.kafka.common.serialization.ByteArraySerializer";
     		String deserializer = StringDeserializer.class.getName();
     		
     		/* STARY VYVOJ
@@ -393,7 +394,7 @@ public class KafkaManagedConnectionFactory implements ManagedConnectionFactory, 
     		properties.put("key.deserializer", deserializer);
     		properties.put("value.deserializer", deserializer);
     		properties.put("key.serializer", serializer);
-    		properties.put("value.serializer", serializer);
+    		properties.put("value.serializer", valueSerializer);
         	properties.put("bootstrap.servers", brokers);
         	properties.put("group.id", groupID);
         	properties.put("security.protocol", "SASL_PLAINTEXT");
