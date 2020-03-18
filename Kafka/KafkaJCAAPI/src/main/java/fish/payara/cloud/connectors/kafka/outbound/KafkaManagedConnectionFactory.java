@@ -107,7 +107,7 @@ public class KafkaManagedConnectionFactory implements ManagedConnectionFactory, 
     @ConfigProperty(type = Long.class, defaultValue = "0", description = "The producer groups together any records that arrive in between request transmissions into a single batched request. ")
     private Long lingerMS;
 
-    @ConfigProperty(type = Long.class, defaultValue = "60000", description = "How long can send block ")
+    @ConfigProperty(type = Long.class, defaultValue = "10000", description = "How long can send block ")
     private Long maxBlockMS;
 
     @ConfigProperty(type = Long.class, defaultValue = "1048576", description = "Maximum size of request (bytes)")
@@ -116,7 +116,7 @@ public class KafkaManagedConnectionFactory implements ManagedConnectionFactory, 
     @ConfigProperty(type = Integer.class, defaultValue = "32768", description = "Receive Buffer (bytes)")
     private Integer receiveBufferBytes;
 
-    @ConfigProperty(type = Integer.class, defaultValue = "30000", description = "Request Timeout (ms)")
+    @ConfigProperty(type = Integer.class, defaultValue = "20000", description = "Request Timeout (ms)")
     private Integer requestTimeout;
 
     @ConfigProperty(type = String.class, description = "Compression type of data sent", defaultValue = "none")
