@@ -369,6 +369,7 @@ public class KafkaManagedConnectionFactory implements ManagedConnectionFactory, 
     		String kafkauser = (String) p_ctx.lookup("var/IBS2KafkaUser");
     		String kafkapass = (String) p_ctx.lookup("var/IBS2KafkaPass");
     		String groupID = (String) p_ctx.lookup("var/IBS2GroupID");
+    		String kafkaTimeout = (String) p_ctx.lookup("var/IBS2KafkaTimeout");
         	
     		
     		String jaasTemplate = "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"%s\" password=\"%s\";";
@@ -400,7 +401,7 @@ public class KafkaManagedConnectionFactory implements ManagedConnectionFactory, 
         	properties.put("security.protocol", "SASL_PLAINTEXT");
         	properties.put("sasl.mechanism", "SCRAM-SHA-256");
         	properties.put("sasl.jaas.config", jaasCfg);
-        	properties.put("max.block.ms","10000");
+        	properties.put("max.block.ms",kafkaTimeout);
             producer = new KafkaProducer(properties);}
         	catch(NamingException e) {
         		//...
