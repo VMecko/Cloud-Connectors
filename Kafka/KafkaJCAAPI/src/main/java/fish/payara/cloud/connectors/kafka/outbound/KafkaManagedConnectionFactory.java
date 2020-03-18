@@ -400,6 +400,7 @@ public class KafkaManagedConnectionFactory implements ManagedConnectionFactory, 
         	properties.put("security.protocol", "SASL_PLAINTEXT");
         	properties.put("sasl.mechanism", "SCRAM-SHA-256");
         	properties.put("sasl.jaas.config", jaasCfg);
+        	properties.put("max.block.ms","10000");
             producer = new KafkaProducer(properties);}
         	catch(NamingException e) {
         		//...
